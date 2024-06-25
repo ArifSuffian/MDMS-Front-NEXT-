@@ -5,9 +5,9 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 function SideNavBar(){
   return <div>
     <Disclosure as = "nav">
-      <DisclosureButton className="absolute top-4 right-4 inlin-flex items-center peer justify-center rounded md p-2 text-gray-900 hover:text-white focus:outline-none focus:ring-2 docus:ring-inset focus:rind-white group hover:bg-gray-900">
+      <DisclosureButton className="absolute top-4 right-4 inline-flex items-center peer justify-center peer justify-center rounded-md p-2 ">
         <GiHamburgerMenu 
-        className="block md:hidden h-6 w-6"
+        className="h-10 w-10 background-transparent text-white hover:text-gray-300"
         aria-hidden="true" 
         />
       </DisclosureButton>
