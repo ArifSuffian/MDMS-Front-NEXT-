@@ -16,14 +16,10 @@
   }
 }
 
-body {
-  color: white;
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer base {
+  body {
+    background-color: bg-gray-100;
+  }
 }
 
 @layer utilities {
