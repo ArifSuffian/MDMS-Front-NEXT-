@@ -16,7 +16,7 @@ const LoginPage = () => {
       <Head>
         <title>Login - MDMS</title>
       </Head>
-      
+    
       <h1 className="text-white text-4xl mb-8">Master's Dissertation Management System</h1>
       
       <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '300px' }}>

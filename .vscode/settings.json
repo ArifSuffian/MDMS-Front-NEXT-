@@ -1,3 +1,11 @@
 {
-    "css.lint.unknownAtRules": "ignore"
+    "css.lint.unknownAtRules": "ignore",
+    "tailwindCSS.includeLanguages": {
+        "javascript": "javascript",
+        "html": "HTML",
+        "typescript": "typescript",
+    },
+   "editor.quickSuggestions": {
+       "strings": true
+    }
   }
