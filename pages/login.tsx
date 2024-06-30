@@ -17,7 +17,7 @@ const LoginPage = () => {
         <title>Login - MDMS</title>
       </Head>
     
-      <h1 className="text-white text-4xl mb-8">Master's Dissertation Management System</h1>
+      <h1 className="text-white text-4xl mb-8">Master&apos;s Dissertation Management System</h1>
       
       <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '300px' }}>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">

@@ -1,71 +1,83 @@
 import React from 'react';
-import Head from 'next/head';
+import {
+  Card,
+  CardContent,
+  Typography,
+  LinearProgress,
+  Grid,
+  Box,
+} from '@mui/material';
 
-const ProgressPage: React.FC = () => {
-  return (
-    <>
-      <Head>
-        <title>My Progress</title>
-      </Head>
+interface SemesterInfo {
+  session: string;
+  semester: number;
+  progress1Date: string;
+  progress2Date: string;
+  finalReportDate: string;
+  presentationDate: string;
+}
 
-      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-      <div className="container mx-auto p-4">
-        <div className="row">
-          <div className="col-xl-12 col-sm-6">
-            <div className="card">
-              <div className="card-body">
-                <h1 className="text-2xl font-bold mb-4">My progress</h1>
-
-                <div className="progress mb-4">
-                  <div
-                    className="progress-bar bg-blue-500 h-4 rounded-full" // will add logics to them
-                    role="progressbar"
-                    aria-valuenow={75}
-                    aria-valuemin={0}
-                    aria-valuemax={100}
-                    style={{ width: '75%' }}
-                  ></div>
-                </div>
-                
-                <h2 className="text-xl font-semibold mb-4">Current semester info:</h2>
-
-                <div className="row details mb-2">
-                  <div className="col-3 font-bold">Session</div>
-                  <div className="col-9">: 2023/2024</div>
-                </div>
-
-                <div className="row details mb-2">
-                  <div className="col-3 font-bold">Semester</div>
-                  <div className="col-9">: 2</div>
-                </div>
-
-                <div className="row details mb-2">
-                  <div className="col-3 font-bold">Progress 1</div>
-                  <div className="col-9">: 2024-4-28</div>
-                </div>
-
-                <div className="row details mb-2">
-                  <div className="col-3 font-bold">Progress 2</div>
-                  <div className="col-9">: 2024-6-2</div>
-                </div>
-
-                <div className="row details mb-2">
-                  <div className="col-3 font-bold">Final Report</div>
-                  <div className="col-9">: 2024-7-4</div>
-                </div>
-
-                <div className="row details mb-2">
-                  <div className="col-3 font-bold">Presentation & Demo</div>
-                  <div className="col-9">: 2024-07-07</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      </div>
-    </>
-  );
+const semesterInfo: SemesterInfo = {
+  session: "2023/2024",
+  semester: 2,
+  progress1Date: "2024-04-28",
+  progress2Date: "2024-06-02",
+  finalReportDate: "2024-07-04",
+  presentationDate: "2024-07-07",
 };
 
-export default ProgressPage;
+function calculateProgress(startDate: string, endDate: string): number {
+  const start = new Date(startDate).getTime();
+  const end = new Date(endDate).getTime();
+  const now = new Date().getTime();
+  
+  if (now < start) return 0;
+  if (now > end) return 100;
+  
+  return Math.round(((now - start) / (end - start)) * 100);
+}
+
+export default function ProgressCard() {
+  const progress = calculateProgress(semesterInfo.progress1Date, semesterInfo.presentationDate);
+
+  return (
+    <Box sx={{ p: 2, bgcolor: '#f5f5f5' }}>
+      <Card sx={{ maxWidth: 700, mx: 'auto' }}>
+        <CardContent>
+          <Typography variant="h5" component="div" gutterBottom align="center" sx={{ mb: 2 }}>
+            My Progress
+          </Typography>
+          <Box sx={{ mb: 3 }}>
+            <LinearProgress 
+              variant="determinate" 
+              value={progress} 
+              sx={{ height: 12, borderRadius: 6 }}
+            />
+            <Typography variant="body1" color="text.secondary" align="right" sx={{ mt: 1 }}>
+              {`${progress}%`}
+            </Typography>
+          </Box>
+          <Typography variant="h6" gutterBottom sx={{ mb: 2 }}>
+            Current semester info:
+          </Typography>
+          <Grid container spacing={2}>
+            {Object.entries(semesterInfo).map(([key, value]) => (
+              <React.Fragment key={key}>
+                <Grid item xs={6}>
+                  <Typography variant="body1" color="text.secondary">
+                    {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim()}:
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="body1">
+                    {key.includes('Date') ? new Date(value as string).toLocaleDateString() : value}
+                  </Typography>
+                </Grid>
+              </React.Fragment>
+            ))}
+          </Grid>
+        </CardContent>
+      </Card>
+    </Box>
+  );
+}
