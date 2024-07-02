@@ -1,0 +1,46 @@
+/* Add this to your EvaluationForm.module.css file */
+
+.evaluationTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .evaluationTable th, .evaluationTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+  }
+  
+  .evaluationTable th {
+    background-color: #f2f2f2;
+  }
+  
+  .evaluationTable input[type="text"] {
+    width: 100%;
+    padding: 5px;
+  }
+  
+  .evaluationTable textarea {
+    width: 100%;
+    padding: 5px;
+    resize: vertical;
+    min-height: 60px;
+  }
+  
+  /* Adjust column widths */
+  .evaluationTable th:nth-child(1),
+  .evaluationTable td:nth-child(1) {
+    width: 50%;
+  }
+  
+  .evaluationTable th:nth-child(2),
+  .evaluationTable td:nth-child(2) {
+    width: 15%;
+  }
+  
+  .evaluationTable th:nth-child(3),
+  .evaluationTable td:nth-child(3) {
+    width: 35%;
+  }

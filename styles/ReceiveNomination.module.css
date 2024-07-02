@@ -1,0 +1,76 @@
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .approveButton,
+  .denyButton {
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  
+  .approveButton {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .denyButton {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .timeSlots {
+    margin-top: 20px;
+  }
+  
+  .timeSlots button {
+    margin: 5px;
+    padding: 5px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    cursor: pointer;
+  }
+  
+  .selectedTime {
+    background-color: #4CAF50 !important;
+    color: white;
+  }
+  
+  .confirmButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .confirmButton:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }

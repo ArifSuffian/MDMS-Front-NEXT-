@@ -1,0 +1,40 @@
+.container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .fileUpload {
+    margin-bottom: 15px;
+  }
+  
+  .fileUpload label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .fileUpload input[type="file"] {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .fileUpload button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .fileUpload button:hover {
+    background-color: #d32f2f;
+  }
