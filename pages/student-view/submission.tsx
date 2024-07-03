@@ -1,66 +1,72 @@
-import React, { useState } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
-import styles from '@/styles/Submission.module.css';
+import React, { useState } from "react";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
+import styles from "@/styles/Submission.module.css";
+import { Box } from "@mui/material";
 
 interface FileUpload {
   id: string;
   name: string;
   file: File | null;
 }
+type SetterFunction<T extends FileUpload | FileUpload[]> = React.Dispatch<React.SetStateAction<T>>;
 
 const Submission: React.FC = () => {
-  const [proposalFile, setProposalFile] = useState<FileUpload>({ id: 'proposal', name: 'Proposal', file: null });
+  const [proposalFile, setProposalFile] = useState<FileUpload>({
+    id: "proposal",
+    name: "Proposal",
+    file: null,
+  });
   const [progress1Files, setProgress1Files] = useState<FileUpload[]>([
-    { id: 'demo1', name: 'Demo slide', file: null },
-    { id: 'logbook1', name: 'Logbook', file: null },
-    { id: 'report1', name: 'PSM-report', file: null },
+    { id: "demo1", name: "Demo slide", file: null },
+    { id: "logbook1", name: "Logbook", file: null },
+    { id: "report1", name: "PSM-report", file: null },
   ]);
   const [progress2Files, setProgress2Files] = useState<FileUpload[]>([
-    { id: 'demo2', name: 'Demo slide', file: null },
-    { id: 'logbook2', name: 'Logbook', file: null },
-    { id: 'report2', name: 'PSM-report', file: null },
+    { id: "demo2", name: "Demo slide", file: null },
+    { id: "logbook2", name: "Logbook", file: null },
+    { id: "report2", name: "PSM-report", file: null },
   ]);
   const [finalFiles, setFinalFiles] = useState<FileUpload[]>([
-    { id: 'presentation', name: 'Presentation Slide', file: null },
-    { id: 'logbookFinal', name: 'Logbook', file: null },
-    { id: 'reportTOC', name: 'PSM Report (TOC)', file: null },
-    { id: 'reportCh1', name: 'PSM Report (Chapter 1)', file: null },
-    { id: 'reportFull', name: 'PSM Report (Full)', file: null },
-    { id: 'shortPaper', name: 'Short paper', file: null },
+    { id: "presentation", name: "Presentation Slide", file: null },
+    { id: "logbookFinal", name: "Logbook", file: null },
+    { id: "reportTOC", name: "PSM Report (TOC)", file: null },
+    { id: "reportCh1", name: "PSM Report (Chapter 1)", file: null },
+    { id: "reportFull", name: "PSM Report (Full)", file: null },
+    { id: "shortPaper", name: "Short paper", file: null },
   ]);
 
-  const handleFileChange = (
+  const handleFileChange = <T extends FileUpload | FileUpload[]>(
     event: React.ChangeEvent<HTMLInputElement>,
-    setterFunction: React.Dispatch<React.SetStateAction<FileUpload | FileUpload[]>>,
+    setterFunction: SetterFunction<T>,
     id: string
   ) => {
     const file = event.target.files?.[0] || null;
-    setterFunction((prev: FileUpload | FileUpload[]) => {
+    setterFunction((prev: T) => {
       if (Array.isArray(prev)) {
-        return prev.map(item => item.id === id ? { ...item, file } : item);
+        return prev.map(item => item.id === id ? { ...item, file } : item) as T;
       } else {
-        return { ...prev, file };
+        return { ...prev, file } as T;
       }
     });
   };
-
-  const handleDelete = (
-    setterFunction: React.Dispatch<React.SetStateAction<FileUpload | FileUpload[]>>,
+  
+  const handleDelete = <T extends FileUpload | FileUpload[]>(
+    setterFunction: SetterFunction<T>,
     id: string
   ) => {
-    setterFunction((prev: FileUpload | FileUpload[]) => {
+    setterFunction((prev: T) => {
       if (Array.isArray(prev)) {
-        return prev.map(item => item.id === id ? { ...item, file: null } : item);
+        return prev.map(item => item.id === id ? { ...item, file: null } : item) as T;
       } else {
-        return { ...prev, file: null };
+        return { ...prev, file: null } as T;
       }
     });
   };
 
-  const renderFileUpload = (
+  const renderFileUpload = <T extends FileUpload | FileUpload[]>(
     fileUpload: FileUpload,
-    setterFunction: React.Dispatch<React.SetStateAction<FileUpload | FileUpload[]>>
+    setterFunction: SetterFunction<T>
   ) => (
     <div key={fileUpload.id} className={styles.fileUpload}>
       <label htmlFor={fileUpload.id}>{fileUpload.name}:</label>
@@ -80,7 +86,8 @@ const Submission: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h1>Submission Page</h1>
+      <Box sx={{ p: 2, bgcolor: '#f5f5f5' }}>
+      <h1><b>Submission Page</b></h1>
       <div className={styles.card}>
         <Tabs>
           <TabList>
@@ -89,7 +96,7 @@ const Submission: React.FC = () => {
             <Tab>Progress 2</Tab>
             <Tab>Final Progress</Tab>
           </TabList>
-
+  
           <TabPanel>
             <h2>Proposal</h2>
             {renderFileUpload(proposalFile, setProposalFile)}
@@ -108,6 +115,7 @@ const Submission: React.FC = () => {
           </TabPanel>
         </Tabs>
       </div>
+      </Box>
     </div>
   );
 };

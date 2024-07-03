@@ -1,76 +1,80 @@
-import { Disclosure, DisclosureButton } from "@headlessui/react";
-import React from "react";
-import { GiHamburgerMenu } from "react-icons/gi";
+import React from 'react';
+import { ROLES, LECTURER_TYPES, User, getAccessLevel, ACCESS_LEVELS } from '@/utils/constants';
 
-// function SideNavBar(){
-//   return <div>
-//     <Disclosure as = "nav">
-//       <DisclosureButton className="absolute top-4 right-4 inline-flex items-center peer justify-center peer justify-center rounded-md p-2 ">
-//         <GiHamburgerMenu
-//         className="h-10 w-10 background-transparent text-white hover:text-gray-300"
-//         aria-hidden="true"
-//         />
-//       </DisclosureButton>
-//       <div className="p-40 w-1/2 h-screen bg-white z-20 fixed top-30 -left-96 lg:w-60 lg:left-0 peer=focus:left-0 peer:transition ease-out delay-150 duration-200"></div>
-//     </Disclosure>
-//   </div>
-// }
+interface NavLink {
+  href: string;
+  label: string;
+  minAccessLevel: number;
+}
 
-// export default SideNavBar;
+interface NavSection {
+  title: string;
+  links: NavLink[];
+}
 
-const SideNav = () => {
+const navLinks: NavSection[] = [
+  {
+    title: 'Student Dashboard',
+    links: [
+      { href: '/student-view/myprogress', label: 'My Progress', minAccessLevel: ACCESS_LEVELS.STUDENT },
+      { href: '/student-view/submission', label: 'Submissions', minAccessLevel: ACCESS_LEVELS.STUDENT },
+      { href: '/student-view/lecturerlist', label: 'Lecturer List', minAccessLevel: ACCESS_LEVELS.STUDENT },
+      { href: '/student-view/projectlist', label: 'Project List', minAccessLevel: ACCESS_LEVELS.STUDENT },
+      { href: '/student-view/vivadetails', label: 'Viva Details', minAccessLevel: ACCESS_LEVELS.STUDENT },
+    ]
+  },
+  {
+    title: 'Lecturer Dashboard',
+    links: [
+      { href: '/lecturer-view/lecturerlist', label: 'Lecturer List', minAccessLevel: ACCESS_LEVELS.LECTURER },
+      { href: '/lecturer-view/nominationlist', label: 'Nomination List', minAccessLevel: ACCESS_LEVELS.LECTURER },
+      { href: '/lecturer-view/projectlist', label: 'Project List', minAccessLevel: ACCESS_LEVELS.LECTURER },
+      { href: '/lecturer-view/viewstudentprog', label: 'View Student Progress', minAccessLevel: ACCESS_LEVELS.LECTURER },
+      { href: '/lecturer-view/vivadetails_lect', label: 'Viva Details', minAccessLevel: ACCESS_LEVELS.LECTURER },
+    ]
+  },
+  {
+    title: 'Examiner Dashboard',
+    links: [
+      { href: '/examiner-view/evaluatestudent', label: 'Evaluate Student', minAccessLevel: ACCESS_LEVELS.EXAMINER },
+      { href: '/examiner-view/receivenominationreq', label: 'Receive Nomination Requests', minAccessLevel: ACCESS_LEVELS.EXAMINER },
+      { href: '/examiner-view/vivadetails_exam', label: 'Viva Details', minAccessLevel: ACCESS_LEVELS.EXAMINER },
+    ]
+  }
+];
+
+const SideNav: React.FC<{ user: User }> = ({ user }) => {
+  const accessLevel = getAccessLevel(user);
+
+  const getVisibleLinks = (links: NavLink[]) => {
+    return links.filter(link => accessLevel >= link.minAccessLevel);
+  };
+
   return (
     <nav className="bg-gray-700 w-64 min-h-screen p-5 text-white">
-      <ul>
-        <h2 className="mb-10 text-2xl">
-          <b>Dashboard</b>
-        </h2>
-        <li className="mb-4">
-          <a href="/student-view/myprogress" className="hover:underline">
-            My Progress
-          </a>
-        </li>   
-        <li className="mb-4">
-          <a href="/student-view/submission" className="hover:underline">
-            Submissions
-          </a>
-        </li>
-        <li className="mb-4">
-          <a href="/student-view/lecturerlist" className="hover:underline">
-            Lecturer list
-          </a>
-        </li>
-        <li className="mb-4">
-          <a href="/student-view/projectlist" className="hover:underline">
-            Project list
-          </a>
-        </li>
-        <li className="mb-4">
-          <a href="/student-view/vivadetails" className="hover:underline">
-            Viva details
-          </a>
-        </li>
-      </ul>
+      {navLinks.map((section, sectionIndex) => {
+        const visibleLinks = getVisibleLinks(section.links);
+        if (visibleLinks.length === 0) return null;
+
+        return (
+          <div key={sectionIndex}>
+            <h2 className="mb-5 text-2xl">
+              <b>{section.title}</b>
+            </h2>
+            <ul className="mb-10">
+              {visibleLinks.map((link, linkIndex) => (
+                <li key={linkIndex} className="mb-4">
+                  <a href={link.href} className="hover:underline">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
     </nav>
   );
 };
 
 export default SideNav;
-
-// |<ul>
-// <li className="mb-4"><a href="/" className="hover:underline">My Progress</a></li>
-// <li className="mb-4"><a href="/submissions" className="hover:underline">Submissions</a></li>
-// <li className="mb-4"><a href="/lecturerlist" className="hover:underline">Lecturer list</a></li>
-// <li className="mb-4"><a href="/projectlist" className="hover:underline">Project list</a></li>
-// <li className="mb-4"><a href="/vivadetails" className="hover:underline">Viva details</a></li>
-// </ul>
-// </nav>
-
-/* <ul>
-        <li className="mb-4"><a href="/" className="hover:underline">My Progress</a></li>
-        <li className="mb-4"><a href="/submissions" className="hover:underline">Submissions</a></li>
-        <li className="mb-4"><a href="/lecturerlist" className="hover:underline">Lecturer list</a></li>
-        <li className="mb-4"><a href="/projectlist" className="hover:underline">Project list</a></li>
-        <li className="mb-4"><a href="/vivadetails" className="hover:underline">Viva details</a></li>
-      </ul>
-    </nav> */

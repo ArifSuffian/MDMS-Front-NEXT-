@@ -1,14 +1,47 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+import api from './api/api';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  const API_URL = api.defaults.baseURL  ; //not sure
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Add your login logic here
-    console.log({ email, password });
+    setError('');
+
+    async function loginUser(email: string, password: string) {
+      try {
+        // this API URL looks like this http://localhost:3001
+        const response = await axios.post(`${API_URL}/auth/login`, { email, password });
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    }
+
+    try {
+      const { accessToken, refreshToken } = await loginUser(email, password);
+      
+      // Store tokens in localStorage or secure cookie
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+
+      // Redirect to dashboard or home page
+      router.push('/student-view/myprogress'); // Replace with your actual route
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        setError(error.response.data.message || 'An error occurred during login');
+      } else {
+        setError('An unexpected error occurred');
+      }
+    }
   };
 
   return (
@@ -22,6 +55,7 @@ const LoginPage = () => {
       <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px', width: '300px' }}>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           <h2 className="font-bold text-xl text-black">Login</h2>
+          {error && <p className="text-red-500">{error}</p>}
           <label htmlFor="email" className="text-black">Email</label>
           <input
             type="email"

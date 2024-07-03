@@ -37,7 +37,8 @@ export default function VivaDetails() {
       alignItems: 'flex-start', 
       justifyContent: 'center', 
       bgcolor: '#f5f5f5',
-      pt: 4  }}>
+      pt: 4,
+      boxShadow:1 }}>
       <Card sx={{ maxWidth: 600, width: '100%', m: 2 }}>
         <CardContent>
           <Typography variant="h4" component="h1" gutterBottom align="center">

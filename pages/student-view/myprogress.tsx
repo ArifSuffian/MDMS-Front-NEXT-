@@ -41,7 +41,7 @@ export default function ProgressCard() {
   const progress = calculateProgress(semesterInfo.progress1Date, semesterInfo.presentationDate);
 
   return (
-    <Box sx={{ p: 2, bgcolor: '#f5f5f5' }}>
+    <Box sx={{ p: 2, bgcolor: '#f5f5f5' , boxShadow:1 }}>
       <Card sx={{ maxWidth: 700, mx: 'auto' }}>
         <CardContent>
           <Typography variant="h5" component="div" gutterBottom align="center" sx={{ mb: 2 }}>
