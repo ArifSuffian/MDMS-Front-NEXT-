@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import styles from "@/styles/Submission.module.css";
-import { Box } from "@mui/material";
+import { Box, Typography, Button, Alert } from "@mui/material";
 
 interface FileUpload {
   id: string;
@@ -35,6 +35,12 @@ const Submission: React.FC = () => {
     { id: "reportFull", name: "PSM Report (Full)", file: null },
     { id: "shortPaper", name: "Short paper", file: null },
   ]);
+  const [error, setError] = useState<string | null>(null);
+
+  const isValidFileType = (file: File): boolean => {
+    const validTypes = ['application/pdf', 'application/zip', 'application/x-zip-compressed'];
+    return validTypes.includes(file.type);
+  };
 
   const handleFileChange = <T extends FileUpload | FileUpload[]>(
     event: React.ChangeEvent<HTMLInputElement>,
@@ -42,6 +48,11 @@ const Submission: React.FC = () => {
     id: string
   ) => {
     const file = event.target.files?.[0] || null;
+    if (file && !isValidFileType(file)) {
+      setError("Invalid file type. Please upload only PDF or ZIP files.");
+      return;
+    }
+    setError(null);
     setterFunction((prev: T) => {
       if (Array.isArray(prev)) {
         return prev.map(item => item.id === id ? { ...item, file } : item) as T;
@@ -68,27 +79,36 @@ const Submission: React.FC = () => {
     fileUpload: FileUpload,
     setterFunction: SetterFunction<T>
   ) => (
-    <div key={fileUpload.id} className={styles.fileUpload}>
-      <label htmlFor={fileUpload.id}>{fileUpload.name}:</label>
+    <Box key={fileUpload.id} className={styles.fileUpload} sx={{ mb: 2 }}>
+      <Typography variant="subtitle1">{fileUpload.name}:</Typography>
       <input
         type="file"
         id={fileUpload.id}
+        accept=".pdf,.zip"
         onChange={(e) => handleFileChange(e, setterFunction, fileUpload.id)}
+        style={{ display: 'none' }}
       />
+      <label htmlFor={fileUpload.id}>
+        <Button variant="contained" component="span">
+          Choose File
+        </Button>
+      </label>
       {fileUpload.file && (
-        <div>
-          <span>{fileUpload.file.name}</span>
-          <button onClick={() => handleDelete(setterFunction, fileUpload.id)}>Delete</button>
-        </div>
+        <Box sx={{ mt: 1, display: 'flex', alignItems: 'center' }}>
+          <Typography variant="body2" sx={{ mr: 1 }}>{fileUpload.file.name}</Typography>
+          <Button variant="outlined" color="secondary" onClick={() => handleDelete(setterFunction, fileUpload.id)}>
+            Delete
+          </Button>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 
   return (
-    <div className={styles.container}>
-      <Box sx={{ p: 2, bgcolor: '#f5f5f5' }}>
-      <h1><b>Submission Page</b></h1>
-      <div className={styles.card}>
+    <Box className={styles.container} sx={{ p: 2, bgcolor: '#f5f5f5' }}>
+      <Typography variant="h4" gutterBottom><b>Submission Page</b></Typography>
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      <Box className={styles.card}>
         <Tabs>
           <TabList>
             <Tab>Proposal</Tab>
@@ -98,25 +118,24 @@ const Submission: React.FC = () => {
           </TabList>
   
           <TabPanel>
-            <h2>Proposal</h2>
+            <Typography variant="h5" gutterBottom>Proposal</Typography>
             {renderFileUpload(proposalFile, setProposalFile)}
           </TabPanel>
           <TabPanel>
-            <h2>Progress 1</h2>
+            <Typography variant="h5" gutterBottom>Progress 1</Typography>
             {progress1Files.map(file => renderFileUpload(file, setProgress1Files))}
           </TabPanel>
           <TabPanel>
-            <h2>Progress 2</h2>
+            <Typography variant="h5" gutterBottom>Progress 2</Typography>
             {progress2Files.map(file => renderFileUpload(file, setProgress2Files))}
           </TabPanel>
           <TabPanel>
-            <h2>Final Progress</h2>
+            <Typography variant="h5" gutterBottom>Final Progress</Typography>
             {finalFiles.map(file => renderFileUpload(file, setFinalFiles))}
           </TabPanel>
         </Tabs>
-      </div>
       </Box>
-    </div>
+    </Box>
   );
 };
 
